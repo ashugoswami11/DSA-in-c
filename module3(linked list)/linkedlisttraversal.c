@@ -1,40 +1,40 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 
-//creating a structure to make linked list nodes
+//creating a structure
 struct Node{
     int data;
-    struct Node*Next;
+    struct Node * next;
 };
 
 void linkedlisttraversal(struct Node * ptr){
-    while(ptr != NULL){
-    printf("%d\n", ptr->data);
-    ptr=ptr->Next;
+    while(ptr !=NULL){
+        printf("%d\n",ptr->data);
+        ptr = ptr->next;
     }
-
 }
+
 int main(){
-    struct Node* head;
-    struct Node* second;
-    struct Node* third;
-    //memory allocation for these linked list in the heap
-    head = (struct Node *) malloc(sizeof(struct Node));
-    second = (struct Node *) malloc(sizeof(struct Node));
-    third = (struct Node *) malloc(sizeof(struct Node));
+    //creating nodes of structure but they are ultimately pointers pointing towards memory locations available in the heap
+    struct Node * head;
+    struct Node * second;
+    struct Node * third;
+    head = (struct Node*)malloc(sizeof(struct Node));
+    second = (struct Node*)malloc(sizeof(struct Node));
+    third = (struct Node*)malloc(sizeof(struct Node));
 
-    //linking of nodes
+    //linking the nodes
+    head->data=7;
+    head->next=second;
 
-    head->data = 7;
-    head->Next = second;
+    second->data=89;
+    second->next=third;
 
-    second->data = 8;
-    second->Next = third;
-
-    third->data = 9;
-    third->Next = NULL ;
+    third->data=76;
+    third->next=NULL;
 
     linkedlisttraversal(head);
 
-return 0;
+    return 0;
 }
