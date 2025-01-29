@@ -82,15 +82,15 @@ int stacktop(struct node * top){
 int bottom(struct node * top){
     struct node * p = top;
     while(p->next != NULL){
-        p = p->next;
+        p=p->next;
     }
-    return p->data;
+    return p->data;   
 }
 
 
-int peek(struct node* top, int position){
+int peek(struct node * top, int position){
     struct node * p = top;
-    for(int i=0; (i<position-1 && p != NULL); i++){
+    for(int i = 0; (i<position-1 && p != NULL); i++){
         p = p->next;
     }
     if(p != NULL){
@@ -99,7 +99,6 @@ int peek(struct node* top, int position){
     else{
         return -1;
     }
-
 }
 
 int main()
