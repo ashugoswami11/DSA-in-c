@@ -60,6 +60,21 @@ int pop(struct stack *expression)
     }
 }
 
+int match(char a, char b)
+{
+    if((a == '{' && b == '}') ||
+         (a == '[' && b == ']') ||
+         (a == '<' && b == '>') ||
+         (a == '(' && b == ')'))
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
 int parenthesischeck(char *expression)
 {
     // a stack to store the bracket as characters
@@ -67,14 +82,15 @@ int parenthesischeck(char *expression)
     bucket->top = -1;
     bucket->size = 100;
     bucket->arr = (char *)malloc(bucket->size * sizeof(char));
+    char popped_char;
 
     for (int i = 0; expression[i] != '\0'; i++)
     {
-        if (expression[i] == '(')
+        if (expression[i] == '(' || expression[i] == '{' || expression[i] == '[' || expression[i] == '<')
         {
-            push(bucket, '(');
+            push(bucket, expression[i]);
         }
-        else if (expression[i] == ')')
+        else if ((expression[i] == ')' || expression[i] == '}' || expression[i] == ']' || expression[i] == '>'))
         {
             if (isempty(bucket))
             {
@@ -82,7 +98,11 @@ int parenthesischeck(char *expression)
             }
             else
             {
-                pop(bucket);
+                popped_char = pop(bucket);
+                if (!match(popped_char, expression[i]))
+                {
+                    return 0;
+                }
             }
         }
     }
@@ -98,12 +118,13 @@ int parenthesischeck(char *expression)
 
 int main()
 {
-    char *expression = "3*43(4+4)(435)8745-4";
-    if(parenthesischeck(expression)){
-        printf("the expression is balanced parenthesis\n");
+    char *expression = "3*43(4+4){>(435)8745-4";
+    if (parenthesischeck(expression))
+    {
+        printf("the expression contains balanced parenthesis\n");
     }
-    else{
-        printf("the expression is not balanced parenthesis\n");
+    else
+    {
+        printf("the expression not contains balanced parenthesis\n");
     }
-
 }
