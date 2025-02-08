@@ -8,35 +8,43 @@ struct stack
     char *arr;
 };
 
-char stacktop(struct stack *ptr)
+int stacktop(struct stack *bucket)
 {
-    return ptr->arr[ptr->top];
+    return bucket->arr[bucket->top];
 }
 
-char *infix_to_postfix(char *infix)
+int isempty(struct stack *bucket)
 {
+    if (bucket->top == -1)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
 
-    // creating a stack to store the operators
-    struct stack *opbucket = (struct stack *)malloc(sizeof(struct stack));
+char *infixtopostfix(char *infix)
+{
+    // here we create a stack to store operators it is a part of stack
+    struct stack *opbucket;
     opbucket->size = 100;
     opbucket->top = -1;
     opbucket->arr = (char *)malloc(opbucket->size * sizeof(char));
 
-    // now i have to make a postfix (a character *  arry) to store the expression after it start converting from infix to postfix
-    // it is not associated with stack
-    char *postfix = (char *)malloc((strlen(infix) + 1) * sizeof(char));
+    // postfix expression is not a part of stack just a simple array to store the infix to postfix converted expression
+    char *postfix = (char *)malloc(strlen(infix) + 1 * sizeof(char));
+    int i = 0; // it will track the infix elements
+    int j = 0; // it will track the prefix elements
 
-    int i = 0;
-    int j = 0;
-
-    // starting the loop and saying unless the arr[i]th position is not equal to the null iterate it
     while (infix[i] != '\0')
     {
         if (!isoperator(infix[i]))
         {
             postfix[j] = infix[i];
-            i++;
             j++;
+            i++;
         }
         else
         {
@@ -52,13 +60,18 @@ char *infix_to_postfix(char *infix)
             }
         }
     }
+    while (!isempty(opbucket))
+    {
+        postfix[j] = pop(opbucket);
+        j++;
+    }
+    postfix[j] = '\0';
+    return postfix;
 }
 
 int main()
 {
-    char *infix = "a*b(j/n)-k+l";
-
-    infix_to_postfix(infix);
+    char *infix = "a*b-c/d+l(k*m)";
 
     return 0;
 }
