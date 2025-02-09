@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 struct stack
 {
@@ -8,9 +9,28 @@ struct stack
     char *arr;
 };
 
+int isfull(struct stack * bucket){
+    if(bucket->top == bucket->size-1){
+        return 1;
+    }
+    else{
+        return 0;
+    }
+}
+
 int stacktop(struct stack *bucket)
 {
     return bucket->arr[bucket->top];
+}
+
+void push(struct stack * bucket, char val){
+    if(isfull(bucket)){
+        printf("stack is overflowed can't push elements \n");
+    }
+    else{
+        bucket->top++;
+        bucket->arr[bucket->top] = val;
+    }
 }
 
 int isempty(struct stack *bucket)
@@ -25,10 +45,45 @@ int isempty(struct stack *bucket)
     }
 }
 
+char pop(struct stack * bucket){
+    if(isempty(bucket)){
+        printf("stack si underflowed can't pop from an empty stack\n");
+    }
+    else{
+        char val = bucket->arr[bucket->top];
+        bucket->top--;
+        return val;
+    }
+}
+
+int precedence(char ch)
+{
+    if (ch == '*' || ch == '/')
+        return 3;
+
+    else if (ch == '+' || ch == '-')
+        return 2;
+
+    else
+    {
+        return 0;
+    }
+}
+
+int isoperator(char ch)
+{
+    if(ch == '*' || ch == '/' || ch == '-' || ch == '+'){
+        return 1;
+    }
+    else{
+        return 0;
+    }
+}
+
 char *infixtopostfix(char *infix)
 {
     // here we create a stack to store operators it is a part of stack
-    struct stack *opbucket;
+    struct stack *opbucket = (struct stack *)malloc(sizeof(struct stack));
     opbucket->size = 100;
     opbucket->top = -1;
     opbucket->arr = (char *)malloc(opbucket->size * sizeof(char));
@@ -71,7 +126,7 @@ char *infixtopostfix(char *infix)
 
 int main()
 {
-    char *infix = "a*b-c/d+l(k*m)";
-
+    char *infix = "a*b-c/d+l*k*m";
+    printf("postfix is %s", infixtopostfix(infix));
     return 0;
 }
