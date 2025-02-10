@@ -1,77 +1,67 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
 
 struct stack
 {
     int size;
-    int top;
-    char *arr;
+    int stacktop;
+    char * arr;
 };
 
-int isfull(struct stack * bucket){
-    if(bucket->top == bucket->size-1){
-        return 1;
-    }
-    else{
-        return 0;
-    }
+char stacktop(struct stack * bucket){
+    return bucket->arr[bucket->stacktop];
 }
 
-int stacktop(struct stack *bucket)
-{
-    return bucket->arr[bucket->top];
-}
-
-void push(struct stack * bucket, char val){
-    if(isfull(bucket)){
-        printf("stack is overflowed can't push elements \n");
-    }
-    else{
-        bucket->top++;
-        bucket->arr[bucket->top] = val;
-    }
-}
-
-int isempty(struct stack *bucket)
-{
-    if (bucket->top == -1)
-    {
+int isempty(struct stack * bucket){
+    if(bucket->stacktop == -1){
         return 1;
     }
     else
     {
         return 0;
     }
+    
+}
+
+int isfull(struct stack * bucket){
+    if(bucket->stacktop == bucket->size-1){
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+    
+}
+
+
+void push(struct stack * bucket, char val){
+    if (isfull(bucket))
+    {
+        printf("stack is overflowed can't push ");
+    }
+    else{
+        bucket->stacktop++;
+        bucket->arr[bucket->stacktop] = val;
+    } 
 }
 
 char pop(struct stack * bucket){
-    if(isempty(bucket)){
-        printf("stack si underflowed can't pop from an empty stack\n");
-    }
-    else{
-        char val = bucket->arr[bucket->top];
-        bucket->top--;
-        return val;
-    }
-}
-
-int precedence(char ch)
-{
-    if (ch == '*' || ch == '/')
-        return 3;
-
-    else if (ch == '+' || ch == '-')
-        return 2;
-
-    else
+    if (isempty(bucket))
     {
+        printf("stack is underflowed can't pop ");
         return 0;
     }
+    else{
+        char val = bucket->arr[bucket->stacktop];
+        bucket->stacktop--;
+        return val;
+    }
+    
 }
 
-int isoperator(char ch)
-{
+int isoperator(char ch){
     if(ch == '*' || ch == '/' || ch == '-' || ch == '+'){
         return 1;
     }
@@ -80,40 +70,51 @@ int isoperator(char ch)
     }
 }
 
-char *infixtopostfix(char *infix)
-{
-    // here we create a stack to store operators it is a part of stack
-    struct stack *opbucket = (struct stack *)malloc(sizeof(struct stack));
+int precedence(char ch){
+    if(ch == '/' || ch == '*'){
+        return 3;
+    }
+    else if (ch == '+' || ch == '-')
+    {
+        return 2;
+    }
+    else{
+        return 0;
+    }
+    
+}
+
+char * infixtopostfix(char * infix){
+    struct stack * opbucket = (struct stack *)malloc(sizeof(struct stack));
     opbucket->size = 100;
-    opbucket->top = -1;
+    opbucket->stacktop = -1;
     opbucket->arr = (char *)malloc(opbucket->size * sizeof(char));
 
-    // postfix expression is not a part of stack just a simple array to store the infix to postfix converted expression
-    char *postfix = (char *)malloc(strlen(infix) + 1 * sizeof(char));
-    int i = 0; // it will track the infix elements
-    int j = 0; // it will track the prefix elements
+    char * postfix = (char *)malloc(strlen(infix)+1 * sizeof(char));
 
-    while (infix[i] != '\0')
-    {
+    //counters for infix and postfix for tracking the index values
+    int i = 0;
+    int j = 0;
+
+    while(infix[i] != '\0'){
         if (!isoperator(infix[i]))
         {
             postfix[j] = infix[i];
-            j++;
             i++;
+            j++;
         }
-        else
-        {
-            if (precedence(infix[i]) > precedence(stacktop(opbucket)))
-            {
-                push(opbucket, infix[i]);
+        else{
+            if(precedence(infix[i]) > precedence(stacktop(opbucket))){
+                push(opbucket , infix[i]);
                 i++;
             }
-            else
-            {
+            else{
                 postfix[j] = pop(opbucket);
                 j++;
             }
+
         }
+        
     }
     while (!isempty(opbucket))
     {
@@ -122,11 +123,12 @@ char *infixtopostfix(char *infix)
     }
     postfix[j] = '\0';
     return postfix;
+    
 }
 
-int main()
-{
-    char *infix = "a*b-c/d+l*k*m";
-    printf("postfix is %s", infixtopostfix(infix));
-    return 0;
+int main(){
+    char * infix = "7*4-59+33/23*9";
+    printf("postfix expression is: %s", infixtopostfix(infix));
+
 }
+
