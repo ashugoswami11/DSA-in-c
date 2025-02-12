@@ -68,5 +68,5 @@ int main(){
    // printf("dequeue element is %d\n ", dequeue(&q));
    // printf("dequeue element is %d\n ", dequeue(&q));
     printf("dequeue element is %d\n", dequeue(&q));
-    printf("dequeue element is %d\n ", dequeue(&q));
+    // printf("dequeue element is %d\n ", dequeue(&q));
 }
