@@ -44,6 +44,7 @@ int dequeue(struct queue * q)
     printf("queue is empty can't dequeue any element \n");
   }  
   else{
+    //we write q->f = (q->f+1)%q->size; first because our queue is 1 step back always it starts from -1 so it remains 1 step back so to dequeue the current element we have to first move the f forward
     q->f = (q->f+1)%q->size;
     a = q->arr[q->f];
   }
