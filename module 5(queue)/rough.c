@@ -1,62 +1,63 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct cqueue{
-    int size;
-    int f;
-    int r;
-    int *arr;
+struct node{
+    int data;
+    struct node * next;
 };
+struct node * f = NULL;
+struct node * r = NULL;
 
-int isfull(struct cqueue * q){
-    if((q->r+1)%q->size == q->f){
-        return 1;
-    }
-    else{ return 0;}
-}
-
-int isempty(struct cqueue * q){
-    if(q->r == q->f){
-        return 1;
-    }
-    else{return 0;}
-}
-
-void enqueue(struct cqueue * q, int val){
-    if (isfull(q))
+int linkqueuetraversal(struct node * ptr){
+    while (ptr != NULL)
     {
-        printf("queue is full can't enqueue\n");
+       printf("%d\n",ptr->data);
+       ptr = ptr->next;
     }
-    else{    
-        q->r = (q->r+1)%q->size;
-        q->arr[q->r] = val;
-    }   
 }
 
-int dequeue(struct cqueue * q){
-    int a = -1;
-    if (isempty(q))
+void enque(int val){
+    struct node * n = (struct node *)malloc(sizeof(struct node));
+    if (n == NULL)
     {
-        printf("queue is empty can't dequeue\n");  
+        printf("queue is full can't enqueue");
+    }else{
+        n->data = val;
+        n->next = NULL;
+        if (f == NULL)
+        {
+            f = r = n;    
+        }else{
+            r->next = n;
+            r =n;
+        }  
+    }  
+}
+
+int dequeue(){
+    struct node * n = f; 
+    int val = -1;
+
+    if (f == NULL)
+    {
+        printf("queue is empty can't dequeue\n");
     }
     else{
-        q->f = (q->f+1)%q->size;
-        a = q->arr[q->f];
+        f = f->next;
+        val = n->data;
+        free(n);
     }
-    return a;
+    return val;
 }
 
 int main(){
-    struct cqueue q;
-    q.size = 4;
-    q.f = q.r = 0;
-    q.arr = (int *)malloc(q.size * sizeof(int));
+    enque(56);
+    enque(889);
+    enque(98);
 
-    enqueue(&q, 34);
-    enqueue(&q, 36);
-    enqueue(&q, 98);
-
-    printf("dequeued element is %d\n", dequeue(&q));
-    printf("dequeued element is %d\n", dequeue(&q));
-
+    linkqueuetraversal(f);
+    
+    printf("dequeue element is %d\n",dequeue());
+    printf("dequeue element is %d\n",dequeue());
+    printf("dequeue element is %d\n",dequeue());
 }

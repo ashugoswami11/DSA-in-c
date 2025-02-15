@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 //first creating two pointers for node initially they are null because they are not pointing anything in the beginning
+//making them global so main function as well as other functions can use them too!
 struct node * f = NULL;
 struct node * r = NULL;
 
