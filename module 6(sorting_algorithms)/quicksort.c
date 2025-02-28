@@ -1,73 +1,63 @@
 #include <stdio.h>
 
-void arraytraversal(int *arr, int size)
-{
+void arraytraverse(int*A,int size){
     for (int i = 0; i < size; i++)
     {
-        printf("%d ", arr[i]);
+        printf(" %d ",A[i]);
     }
+    printf("\n");
+    
 }
 
-int partition(int *A, int low, int high)
-{ // low =A[0] , high =[size-1]
+int partition(int * A, int low , int high){
     int pivot = A[low];
-    int i = low + 1;
+    int i = low+1;
     int j = high;
     int temp;
 
-    do
-    {
-        while (A[i] <= pivot)
-        { // i will keep checking for an element which is bigger than pivot
+    do{
+        while (A[i]<=pivot)
+        {
             i++;
         }
-        while (A[j] > pivot)
-        { // j will keep checking for an element which is smaller than pivot
+        while (pivot<A[j]){
             j--;
         }
-
-        if (i < j) /*if ith element is bigger than jth element then swap them means we i was seek for element bigger and j was seek for element
-                    smaller than pivot and they both found before crossover off i and j so simply swap them*/
-        {
+        if(i<j){
             temp = A[i];
             A[i] = A[j];
             A[j] = temp;
         }
-    } while (i < j); // we used do-while looop so atleast for once it run and then keep on comparing
+    }while (i<j); //it will stop when index of j become smaller than index of i
 
-    // swap if i becomes greater than j and j fails to find and value smaller than pivot
-    temp = A[low]; // storing pivot into temporary variable
-    A[low] = A[j]; // storing bigger element which was on pivot to where j was which is obv j is smaller
-    A[j] = temp;   // now because pivot is bigger than j so swap between them
-    return j;
+   //swapping of A[low](bigger) and A[j](smaller)
+   temp = A[low]; // bigger value to temp var
+   A[low] = A[j]; // smaller value on the place of bigger value 
+   A[j] = temp;  // on the empty place of smaller value bigger value will place 
+   return j;  //index value of pivot to new place as a partition
 }
 
-void quickSort(int *A, int low, int high)
-{
+void quicksort(int * A, int low, int high){
+    
+    int partitionindex; //index of pivot after partition
 
-    int partitionIndex; // index of pivot after partition
-
-    // base case
-    if (low < high)
-    {
-        partitionIndex = partition(A, low, high);
-        quickSort(A, low, partitionIndex - 1);
-        quickSort(A, partitionIndex + 1, high);
+    if(low<high){ //until array will not left with a single element or no element
+    partitionindex = partition(A,low,high);
+    quicksort(A,low,partitionindex-1); //left subarray
+    quicksort(A,partitionindex+1,high); //right subarray
     }
 }
 
-int main()
-{
-    int A[] = {23, 45, 76, 5, 8, 44, 58, 99, 1, 2};
+int main(){
+    int A[] = {23,45,22,7,3,90,65,3,78,66};
     int size = 10;
 
-    printf("array before sort");
+    printf("array before sorting");
+    arraytraverse(A,size);
 
-    arraytraversal(A, size);
+    quicksort(A,0,size-1);
 
-    quickSort(A, 0, size - 1);
-
-    printf("array after sort");
-
-    arraytraversal(A, size);
+    printf("array after sorting");
+    arraytraverse(A,size);
+    
 }
